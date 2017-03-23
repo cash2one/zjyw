@@ -1,0 +1,154 @@
+2016-08-13 01:00:43,769 T139973825791936 INFO 来自session的用户名：zjyw
+2016-08-13 01:01:36,840 T139973825791936 INFO 已进入函数。。。。
+2016-08-13 01:01:36,840 T139973825791936 INFO 用户【zjyw】登录
+2016-08-13 01:01:36,920 T139973825791936 INFO 把用户名与密码存放到session中，用于之后的判断用户是否登陆
+2016-08-13 01:01:36,970 T139973825791936 INFO 会话session：【<WSGIRequest
+path:/login_up/,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'username': [u'zjyw'], u'password': [u'Zjyw_123']}>,
+COOKIES:{},
+META:{'CONTENT_LENGTH': '31',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded;charset=utf-8',
+ u'CSRF_COOKIE': u'tb9EdUl718rNRT8tpC1ojwzwIkffAG5n',
+ u'CSRF_COOKIE_USED': True,
+ 'DOCUMENT_ROOT': '/usr/local/nginx/html',
+ 'HTTPS': 'on',
+ 'HTTP_ACCEPT': 'application/json, text/javascript, */*; q=0.01',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'zh-CN',
+ 'HTTP_CACHE_CONTROL': 'no-cache',
+ 'HTTP_CONNECTION': 'Keep-Alive',
+ 'HTTP_CONTENT_LENGTH': '31',
+ 'HTTP_CONTENT_TYPE': 'application/x-www-form-urlencoded;charset=utf-8',
+ 'HTTP_HOST': '10.2.46.150',
+ 'HTTP_REFERER': 'https://10.2.46.150/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Windows NT 6.1; WOW64; Trident/7.0; rv:11.0) like Gecko',
+ 'HTTP_X_CSRFTOKEN': 'null',
+ 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
+ 'PATH_INFO': u'/login_up/',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '10.2.46.58',
+ 'REMOTE_PORT': '52268',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_URI': '/login_up/',
+ u'SCRIPT_NAME': u'',
+ 'SERVER_NAME': '10.2.46.150',
+ 'SERVER_PORT': '443',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'uwsgi.node': 'localhost.localdomain',
+ 'uwsgi.version': '2.0.13.1',
+ 'wsgi.errors': <open file 'wsgi_errors', mode 'w' at 0x7f4e27efbb70>,
+ 'wsgi.file_wrapper': <built-in function uwsgi_sendfile>,
+ 'wsgi.input': <uwsgi._Input object at 0x7f4e27c64bb8>,
+ 'wsgi.multiprocess': True,
+ 'wsgi.multithread': False,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'https',
+ 'wsgi.version': (1, 0)}>】
+2016-08-13 01:01:36,971 T139973825791936 INFO 用户【zjyw】登录验证成功
+2016-08-13 01:01:37,155 T139973825791936 INFO 来自session的用户名：zjyw
+2016-08-13 01:26:27,929 T139973825791936 INFO 已进入函数。。。。
+2016-08-13 01:26:27,930 T139973825791936 INFO 用户【zjyw】登录
+2016-08-13 01:26:28,011 T139973825791936 INFO 把用户名与密码存放到session中，用于之后的判断用户是否登陆
+2016-08-13 01:26:28,079 T139973825791936 INFO 会话session：【<WSGIRequest
+path:/login_up/,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'username': [u'zjyw'], u'password': [u'Zjyw_123']}>,
+COOKIES:{},
+META:{'CONTENT_LENGTH': '31',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded;charset=UTF-8',
+ u'CSRF_COOKIE': u'tQmBTtpmwITVwq3e1Du9m21KyTJ2aXPt',
+ u'CSRF_COOKIE_USED': True,
+ 'DOCUMENT_ROOT': '/usr/local/nginx/html',
+ 'HTTPS': 'on',
+ 'HTTP_ACCEPT': 'application/json, text/javascript, */*; q=0.01',
+ 'HTTP_ACCEPT_ENCODING': 'gzip,deflate,sdch',
+ 'HTTP_ACCEPT_LANGUAGE': 'zh-CN,zh;q=0.8',
+ 'HTTP_CONNECTION': 'keep-alive',
+ 'HTTP_CONTENT_LENGTH': '31',
+ 'HTTP_CONTENT_TYPE': 'application/x-www-form-urlencoded;charset=UTF-8',
+ 'HTTP_HOST': '10.2.46.150',
+ 'HTTP_ORIGIN': 'https://10.2.46.150',
+ 'HTTP_REFERER': 'https://10.2.46.150/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (Windows NT 6.1; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/29.0.1521.3 Safari/537.36',
+ 'HTTP_X_CSRFTOKEN': 'null',
+ 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
+ 'PATH_INFO': u'/login_up/',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '10.2.46.239',
+ 'REMOTE_PORT': '5326',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_URI': '/login_up/',
+ u'SCRIPT_NAME': u'',
+ 'SERVER_NAME': '10.2.46.150',
+ 'SERVER_PORT': '443',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'uwsgi.node': 'localhost.localdomain',
+ 'uwsgi.version': '2.0.13.1',
+ 'wsgi.errors': <open file 'wsgi_errors', mode 'w' at 0x7f4e27efbb70>,
+ 'wsgi.file_wrapper': <built-in function uwsgi_sendfile>,
+ 'wsgi.input': <uwsgi._Input object at 0x7f4e27c64c60>,
+ 'wsgi.multiprocess': True,
+ 'wsgi.multithread': False,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'https',
+ 'wsgi.version': (1, 0)}>】
+2016-08-13 01:26:28,079 T139973825791936 INFO 用户【zjyw】登录验证成功
+2016-08-13 01:26:28,110 T139973825791936 INFO 来自session的用户名：zjyw
+2016-08-13 01:52:25,811 T139973825791936 INFO 已进入函数。。。。
+2016-08-13 01:52:25,812 T139973825791936 INFO 用户【zjyw】登录
+2016-08-13 01:52:26,089 T139973825791936 INFO 用户名或密码码输入错误
+2016-08-13 01:52:41,563 T139973825791936 INFO 已进入函数。。。。
+2016-08-13 01:52:41,563 T139973825791936 INFO 用户【zjyw】登录
+2016-08-13 01:52:41,758 T139973825791936 INFO 用户名或密码码输入错误
+2016-08-13 01:53:03,850 T139973825791936 INFO 已进入函数。。。。
+2016-08-13 01:53:03,851 T139973825791936 INFO 用户【zjyw】登录
+2016-08-13 01:53:04,043 T139973825791936 INFO 把用户名与密码存放到session中，用于之后的判断用户是否登陆
+2016-08-13 01:53:04,914 T139973825791936 INFO 会话session：【<WSGIRequest
+path:/login_up/,
+GET:<QueryDict: {}>,
+POST:<QueryDict: {u'username': [u'zjyw'], u'password': [u'Zjyw_123']}>,
+COOKIES:{},
+META:{'CONTENT_LENGTH': '31',
+ 'CONTENT_TYPE': 'application/x-www-form-urlencoded;charset=utf-8',
+ u'CSRF_COOKIE': u'8Fdug2um6hZ01QB3Slq2Sdz1WbcGh6v9',
+ u'CSRF_COOKIE_USED': True,
+ 'DOCUMENT_ROOT': '/usr/local/nginx/html',
+ 'HTTPS': 'on',
+ 'HTTP_ACCEPT': 'application/json, text/javascript, */*; q=0.01',
+ 'HTTP_ACCEPT_ENCODING': 'gzip, deflate',
+ 'HTTP_ACCEPT_LANGUAGE': 'zh-cn',
+ 'HTTP_CACHE_CONTROL': 'no-cache',
+ 'HTTP_CONNECTION': 'Keep-Alive',
+ 'HTTP_CONTENT_LENGTH': '31',
+ 'HTTP_CONTENT_TYPE': 'application/x-www-form-urlencoded;charset=utf-8',
+ 'HTTP_HOST': '10.2.46.150',
+ 'HTTP_REFERER': 'https://10.2.46.150/',
+ 'HTTP_USER_AGENT': 'Mozilla/5.0 (compatible; MSIE 9.0; Windows NT 6.1; WOW64; Trident/5.0) Core/1.47.933.400 QQBrowser/9.4.8699.400',
+ 'HTTP_X_CSRFTOKEN': 'null',
+ 'HTTP_X_REQUESTED_WITH': 'XMLHttpRequest',
+ 'PATH_INFO': u'/login_up/',
+ 'QUERY_STRING': '',
+ 'REMOTE_ADDR': '10.2.46.239',
+ 'REMOTE_PORT': '6425',
+ 'REQUEST_METHOD': 'POST',
+ 'REQUEST_URI': '/login_up/',
+ u'SCRIPT_NAME': u'',
+ 'SERVER_NAME': '10.2.46.150',
+ 'SERVER_PORT': '443',
+ 'SERVER_PROTOCOL': 'HTTP/1.1',
+ 'uwsgi.node': 'localhost.localdomain',
+ 'uwsgi.version': '2.0.13.1',
+ 'wsgi.errors': <open file 'wsgi_errors', mode 'w' at 0x7f4e27efbb70>,
+ 'wsgi.file_wrapper': <built-in function uwsgi_sendfile>,
+ 'wsgi.input': <uwsgi._Input object at 0x7f4e27c64e28>,
+ 'wsgi.multiprocess': True,
+ 'wsgi.multithread': False,
+ 'wsgi.run_once': False,
+ 'wsgi.url_scheme': 'https',
+ 'wsgi.version': (1, 0)}>】
+2016-08-13 01:53:04,914 T139973825791936 INFO 用户【zjyw】登录验证成功
+2016-08-13 01:53:05,400 T139973825791936 INFO 来自session的用户名：zjyw
+2016-08-13 02:13:59,383 T139973825791936 INFO 来自session的用户名：zjyw
+2016-08-13 02:14:29,326 T139973825791936 INFO 来自session的用户名：zjyw
+2016-08-13 02:15:54,983 T139973825791936 INFO 来自session的用户名：zjyw

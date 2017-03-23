@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机体检明细信息</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link id="bootstrap-style" href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="/static/css/style.css" rel="stylesheet">
+    <link id="base-style-responsive" href="/static/css/style-responsive.css" rel="stylesheet">
+    <!-- end: CSS -->
+    
+    <script src="/static/js/jquery-1.9.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/mycookies.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="/static/js/html5.js"></script>
+        <link id="ie-style" href="/static/css/ie.css" rel="stylesheet">
+    <![endif]-->
+    
+    <!--[if IE 9]>
+        <link id="ie9style" href="/static/css/ie9.css" rel="stylesheet">
+    <![endif]-->
+        
+    <!-- start: Favicon -->
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <!-- end: Favicon -->
+    
+    <style>  
+        div.graph  
+                {  
+                    width: 280px;  
+                    height: 200px;  
+                }
+        .table th, .table td { 
+            text-align: left; 
+            height:38px;
+        }
+    </style>  
+</head>
+
+<body>
+
+    <div class="container-fluid">
+        <div class="row-fluid sortable">
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">主机描述信息</span></h2>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>主机ID</th>
+                            <th>任务ID</th>
+                            <th>IP地址</th>
+                            <th>MAC地址</th>
+                            <th>操作系统</th>
+                            <th>运行的数据库</th>
+                            <th>运行的中间件</th>
+                            <th>检查起始时间</th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>{{ zjxx.agent_id }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.task_id }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.ip_addr }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.mac_addr }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.os_fullname }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.db_type }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.middleware_type }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.scheme_time }}</h2></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!--/row --> 
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">体检详细信息</span></h2>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                
+                    <thead>
+                        <tr>
+                            <th>检测项目</th>
+                            <th>检测结果</th>
+                            <th>检测时间</th>
+                            <th>标准值</th>
+                            <th>实际值</th>
+                            <th>危险程度</th>
+                        </tr>
+                    </thead> 
+                    {% if tjxx_lst %}  
+                    <tbody>
+                        {% for xx in tjxx_lst %}
+                        <tr>
+                            <td class="center"><h2>{{ xx.check_item }}</h2></td>
+                            {% ifequal xx.check_result 'pass' %}  
+                                <td class="center"><h2>通过</h2></td>
+                            {% endifequal %}
+                            {% ifequal xx.check_result 'unpass' %}  
+                                <td class="alert alert-error"><h2>未通过</h2></td>
+                            {% endifequal %}
+                            {% ifequal xx.check_result 'uncheck' %}  
+                                <td class="alert alert-erro"><h2>未检查</h2></td>
+                            {% endifequal %}
+                            <td class="center"><h2>{{ xx.scheme_time }}</h2></td>
+                            <td class="center"><h2>{{ xx.required_config }}</h2></td>
+                            <td class="center"><h2>{{ xx.actual_config }}</h2></td>
+                            {% ifequal xx.threat_level '5' %}  
+                                <td class="alert alert-error"><h2>极度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal xx.threat_level '4' %}  
+                                <td class="center"><h2>高度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal xx.threat_level '3' %}  
+                                <td class="center"><h2>中度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal xx.threat_level '2' %}  
+                                <td class="center"><h2>低度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal xx.threat_level '1' %}  
+                                <td class="center"><h2>比较安全</h2></td>
+                            {% endifequal %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+        </div>
+    </div>
+    <!-- end: row -->
+            
+</body>
+</html>

@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机安全</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link id="bootstrap-style" href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="/static/css/style.css" rel="stylesheet">
+    <link id="base-style-responsive" href="/static/css/style-responsive.css" rel="stylesheet">
+    <!-- end: CSS -->
+    
+
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+          <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+        <link id="ie-style" href="/static/css/ie.css" rel="stylesheet">
+    <![endif]-->
+    
+    <!--[if IE 9]>
+        <link id="ie9style" href="/static/css/ie9.css" rel="stylesheet">
+    <![endif]-->
+    
+    <style>  
+        div.graph  
+                {  
+                    width: 280px;  
+                    height: 200px;  
+                }  
+    </style>  
+
+</head>
+
+<body>
+    <div class="row-fluid sortable">
+    <div class="box span12">
+        <div class="box-header" data-original-title>
+            <h2><i class="halflings-icon info-sign"></i><span class="break"></span>任务列表</h2>
+        </div>
+        <div class="box-content">
+            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                <thead>
+                    <tr>
+                        <th>任务ID</th>
+                        <th>任务模板</th>
+                        <th>任务描述</th>
+                        <th>任务周期</th>
+                        <th>任务状态</th>
+                    </tr>
+                </thead>   
+                <tbody>
+                    {% for rwxx in rwxx_dic %}
+                        {% ifequal rwxx.task_state '0' %}
+                        <tr>
+                            <td class="center text-warning"><h2>{{ rwxx.task_id }}</td>
+                            <td class="center text-warning"><h2>{{ rwxx.task_module }}</td>
+                            <td class="center text-warning"><h2>{{ rwxx.task_detail }}</td>
+                            <td class="center" ><h2>
+                            {% ifequal rwxx.task_circle "0" %}
+                                一次性任务
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "1" %}
+                                每天一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "2" %}
+                                每周一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "3" %}
+                                每月一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "4" %}
+                                每季度一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "5" %}
+                                每年一次
+                            {% endifequal %}
+                            </td>
+                            <td class="center text-warning"><h2>未启用</td>
+                        </tr>
+                        {% endifequal %}
+                        {% ifequal  rwxx.task_state '9' %}
+                        <tr>
+                            <td class="center"><h2>{{ rwxx.task_id }}</td>
+                            <td class="center"><h2>{{ rwxx.task_module }}</td>
+                            <td class="center"><h2>{{ rwxx.task_detail }}</td>
+                            <td class="center" ><h2>
+                            {% ifequal rwxx.task_circle "0" %}
+                                一次性任务
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "1" %}
+                                每天一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "2" %}
+                                每周一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "3" %}
+                                每月一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "4" %}
+                                每季度一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "5" %}
+                                每年一次
+                            {% endifequal %}
+                            </td>
+                            <td class="center"><h2>已执行</td>
+                        </tr>
+                        {% endifequal %}
+                        {% ifequal  rwxx.task_state '1' %}
+                        <tr>
+                            <td class="center"><h2>{{ rwxx.task_id }}</td>
+                            <td class="center"><h2>{{ rwxx.task_module }}</td>
+                            <td class="center"><h2>{{ rwxx.task_detail }}</td>
+                            <td class="center" ><h2>
+                            {% ifequal rwxx.task_circle "0" %}
+                                一次性任务
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "1" %}
+                                每天一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "2" %}
+                                每周一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "3" %}
+                                每月一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "4" %}
+                                每季度一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "5" %}
+                                每年一次
+                            {% endifequal %}
+                            </td>
+                            <td class="center"><h2>启用</td>
+                        </tr>
+                        {% endifequal %}
+                        {% ifequal  rwxx.task_state '2' %}
+                        <tr>
+                            <td class="center"><h2>{{ rwxx.task_id }}</td>
+                            <td class="center"><h2>{{ rwxx.task_module }}</td>
+                            <td class="center"><h2>{{ rwxx.task_detail }}</td>
+                            <td class="center" ><h2>
+                            {% ifequal rwxx.task_circle "0" %}
+                                一次性任务
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "1" %}
+                                每天一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "2" %}
+                                每周一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "3" %}
+                                每月一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "4" %}
+                                每季度一次
+                            {% endifequal %}
+                            {% ifequal rwxx.task_circle "5" %}
+                                每年一次
+                            {% endifequal %}
+                            </td>
+                            <td class="center"><h2>未启用</td>
+                        </tr>
+                        {% endifequal %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        
+        </div>
+    </div>
+    </div>
+</body>
+</html>

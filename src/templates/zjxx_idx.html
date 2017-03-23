@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机安全</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link id="bootstrap-style" href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="/static/css/style.css" rel="stylesheet">
+    <link id="base-style-responsive" href="/static/css/style-responsive.css" rel="stylesheet">
+    <!-- end: CSS -->
+
+    <!-- start: Favicon -->
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <!-- end: Favicon -->
+    
+    <style>  
+        div.graph  
+                {  
+                    width: 280px;  
+                    height: 200px;  
+                }  
+        
+    </style>
+</head>
+
+<body>
+   <!-- start: Content -->
+    {% if not xyxx %}
+          
+    <div id="content_detail" class="box span12">
+    <div class="row-fluid sortable">  
+
+        <div class="box-header" data-original-title>
+            <h2><i class="halflings-icon user"></i><span class="break"></span>主机信息</h2>
+        </div>     
+        <div class="box-content">
+            <table class="table table-striped table-bordered bootstrap-datatable datatable">
+              <thead>
+                  <tr>
+                      <th>主机ID</th>
+                      <th>主机名</th>
+                      <th>操作系统</th>
+                      <th>分组信息</th>
+                      <th>公网IP</th>
+                      <th>操作</th>
+                      
+                  </tr>
+              </thead>   
+              <tbody>
+                {% for zjxx in zjxx_dic %}
+                <tr>
+                    <td class="center"><h2>{{ zjxx.agent_id }}</td>
+                    
+                    {% if zjxx.agent_name %}
+                        <td class="center"><h2>{{ zjxx.agent_name }}</td>
+                    {% else %}
+                        <td class="center"><h2>--</td>
+                    {% endif%}
+                    
+                    {% if zjxx.agent_system %}
+                        <td class="center"><h2>{{ zjxx.agent_system }}</td>
+                    {% else %}
+                        <td class="center"><h2>--</td>
+                    {% endif%}
+                    
+                    {% if zjxx.agent_group %}
+                        <td class="center"><h2>{{ zjxx.agent_group }}</td>
+                    {% else %}
+                        <td class="center"><h2>--</td>
+                    {% endif%}
+                    
+                    {% if zjxx.agent_ip %}
+                        <td class="center"><h2>{{ zjxx.agent_ip }}</td>
+                    {% else %}
+                        <td class="center"><h2>--</td>
+                    {% endif%}
+                    
+                    <td class="center">
+                        <a class="glyphicons-icon notes" title="查看详情" onclick="get_zjxx_detail({{ zjxx.agent_id }});" href='#' ></a>
+                        <a class="glyphicons-icon circle_minus" title="删除" onclick="del_zjxx({{ zjxx.agent_id }});" href='#' ></a>
+                    </td>
+                </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+        </div>
+        
+    </div><!--/span-->
+    </div><!--/row-->
+    {% else %}
+        {{ xyxx }}
+    {% endif %}
+    
+</body>
+</html>

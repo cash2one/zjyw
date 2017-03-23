@@ -1,0 +1,634 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机安全</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link id="bootstrap-style" href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="/static/css/style.css" rel="stylesheet">
+    <link id="base-style-forms" href="/static/css/style-forms.css" rel="stylesheet">
+    <link id="base-style-responsive" href="/static/css/style-responsive.css" rel="stylesheet">
+    <!-- end: CSS -->
+    <script src="/static/js/jquery-1.9.1.min.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/mycookies.js"></script>
+    <script src="/static/js/jquery-migrate-1.0.0.min.js"></script>
+    <script src="/static/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <!--<script src="/static/js/myjquary.js"></script>-->
+    <!-- start: Favicon -->
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <!-- end: Favicon -->
+    
+    <style>  
+        div.graph  
+                {  
+                    width: 280px;  
+                    height: 200px;  
+                }  
+        .table th, .table td { 
+            text-align: center; 
+            height:38px;
+        }
+    </style>  
+    <script type="text/javascript">
+    function sync_post( url , data ) {
+        /*
+        同步POST
+        同步方式操作ajax，返回值同call_python，为一个字典:
+        其中-> ret 0 失败 1 成功
+                当ret==1 时，val为ajax返回的json对象
+                当ret==0 时，exc为错误内容：null，"timeout", "error", "notmodified" 和 "parsererror"
+        用法举例：
+            ret = sync_post( "/cx/jgxx/", { "hh": hh} )
+            if ( ret.ret ){
+                set_value( 'jgmc' , ret.val );
+            } else {
+                set_status( "获取行名出错：" + ret.exc );
+            }
+        */
+        var retval = { ret: 0 }
+        jQuery.ajax( {
+            async: false,  //同步 异步为true
+            type: 'POST',
+            url: url,
+            data: data,
+            cache: false,
+            contentType: "application/x-www-form-urlencoded;charset=utf-8", 
+            dataType:"json",
+            //成功
+            success:function( json ){
+                retval.ret = 1
+                retval.val = json;
+            },
+            //错误
+            error: function( XMLHttpRequest, textStatus, errorThrown ){
+                //更新交易页面框架信息 statusbar
+                retval.ret = 0;
+                retval.exc = textStatus;
+            }
+        } );
+        return retval;
+    }
+    //主机信息
+    function get_zjxx(){
+        rr = sync_post( "/zjxx/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    //主机详情
+    function get_zjxx_detail(zjip){
+        rr = sync_post( "/zjxx_detail/" , {'zjip':zjip} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+   //主机分组
+    function get_zjfz(){
+        rr = sync_post( "/zjfz/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    
+    //主机id生成
+    function get_zjid(){
+        rr = sync_post( "/zjid/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    function produceID(){
+        rr = sync_post( "/zjid_made/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                id = json.agent_id.toString()
+                mm = json.agent_mm.toString()
+                document.getElementById('input_ID').value=('0000'+'-'+('00'+id.substring(0,2))+'-'+id.substring(2,6)+'-'+id.substring(6,10));
+                document.getElementById('input_MM').value=mm;
+                document.getElementById('input_ID').disabled = 'disabled';
+                document.getElementById('input_MM').disabled = 'disabled';
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    //任务信息
+    function get_rwxx(zjip){
+        rr = sync_post( "/rwxx/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    //任务信息
+    function rwdz(){
+        rr = sync_post( "/rwdz/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    
+    //任务定制改变主机组触发的函数
+    function change(zjz){
+      arr = zjz.split("+")
+      zj = '主机'+arr[0].replace('|','、主机')
+      mb = arr[1]
+      document.getElementById('input_ZJ').value = zj;
+      $("#select_module").val(mb);
+     }
+     
+    //保存制定的任务
+    function save_module(){
+        zjz = document.getElementById('select_zjz').value.split("+")[2]
+        mb = document.getElementById('select_module').value
+        rr = sync_post( "/save_rwdz/" , {"zjz":zjz, "mb":mb} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                alert(json.xyxx);
+                window.location.href = window.location.href
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    
+    //告警信息
+    function get_gjxx(){
+        rr = sync_post( "/gjxx/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    //屏蔽告警信息
+    function ping_warn(id){
+        rr = sync_post( "/pb_gjxx/" , {"id":id} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                alert(json.xyxx);
+                window.location.href = window.location.href
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    //告警信息
+    function gjcl(){
+        rr = sync_post( "/gjxx_pb/" , {} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                content.innerHTML = json.cont
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    //释放告警信息
+    function no_ping_warn(id){
+        rr = sync_post( "/no_pb_gjxx/" , {"id":id} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                alert(json.xyxx);
+                window.location.href = window.location.href
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("登录失败，请联系管理员");
+            return false;
+        }
+    }
+    
+    //启动任务
+    function task_start(id){
+        if ( window.confirm( "确定运行此任务？" ) ){
+            rr = sync_post( "/task_start/" , {"id":id} );
+            if ( rr.ret ) {
+                json = rr.val;
+                if(json.xym=='000000'){
+                    alert(json.xyxx);
+                    window.location.href = window.location.href
+                    return true;
+                }else{
+                    alert(json.xyxx);
+                    return false;
+                }
+            } else {
+                alert("登录失败，请联系管理员");
+                return false;
+            }
+        }
+    }
+    //暂停任务
+    function task_stop(id){
+        if ( window.confirm( "确定停止此任务？" ) ){
+            rr = sync_post( "/task_stop/" , {"id":id} );
+            if ( rr.ret ) {
+                json = rr.val;
+                if(json.xym=='000000'){
+                    alert(json.xyxx);
+                    window.location.href = window.location.href
+                    return true;
+                }else{
+                    alert(json.xyxx);
+                    return false;
+                }
+            } else {
+                alert("登录失败，请联系管理员");
+                return false;
+            }
+        }
+    }
+    //删除任务
+    function task_del(id){
+        if ( window.confirm( "确定删除此任务？" ) ){
+            rr = sync_post( "/task_del/" , {"id":id} );
+            if ( rr.ret ) {
+                json = rr.val;
+                if(json.xym=='000000'){
+                    alert(json.xyxx);
+                    window.location.href = window.location.href
+                    return true;
+                }else{
+                    alert(json.xyxx);
+                    return false;
+                }
+            } else {
+                alert("登录失败，请联系管理员");
+                return false;
+            }
+        }
+    }
+    //添加主机任务
+    function task_add_tz(){
+        url = '/task_add_tz/';
+        var winOpen =window.showModalDialog(url,window,'dialogHeight:450px, dialogLeft:500px, dialogTop:100px, dialogWidth:600px, status:0, edge:sunken'); 
+        if(!has_showModalDialog) return;//chrome 返回 因为showModalDialog是阻塞的 open不一样; 
+        //刷新父页面 
+//        parent.location.reload(); 
+    }
+    //编辑主机任务
+    function task_edit_tz(id,select_module,circle,start_time,state,rwmc,rwms){
+        url = '/task_edit_tz/?circle='+String(circle) +'&start_time='+String(start_time) +'&state='+String(state) +'&select_module='+String(select_module) +'&id='+id+'&rwmc='+String(rwmc)+'&rwms='+String(rwms);
+        var winOpen =window.showModalDialog(url,window,'dialogHeight:450px, dialogLeft:500px, dialogTop:100px, dialogWidth:600px, status:0, edge:sunken'); 
+        if(!has_showModalDialog) return;//chrome 返回 因为showModalDialog是阻塞的 open不一样; 
+        //刷新父页面 
+//        parent.location.reload(); 
+    }
+
+    sortitems = 1;
+    function move(fbox,tbox) {
+        for(var i=0; i<fbox.options.length; i++) {
+        if(fbox.options[i].selected && fbox.options[i].value != "") {
+        var no = new Option();
+        no.value = fbox.options[i].value;
+        no.text = fbox.options[i].text;
+        tbox.options[tbox.options.length] = no;
+        fbox.options[i].value = "";
+        fbox.options[i].text = "";
+           }
+        }
+        BumpUp(fbox);
+        if (sortitems) SortD(tbox);
+        }
+    function BumpUp(box)  {
+        for(var i=0; i<box.options.length; i++) {
+            if(box.options[i].value == "")  {
+                for(var j=i; j<box.options.length-1; j++)  {
+                    box.options[j].value = box.options[j+1].value;
+                    box.options[j].text = box.options[j+1].text;
+                }
+                var ln = i;
+                break;
+            }
+        }
+        if(ln < box.options.length)  {
+            box.options.length -= 1;
+            BumpUp(box);
+        }
+    }
+
+    function SortD(box)  {
+        var temp_opts = new Array();
+        var temp = new Object();
+        for(var i=0; i<box.options.length; i++)  {
+            temp_opts[i] = box.options[i];
+        }
+        for(var x=0; x<temp_opts.length-1; x++)  {
+            for(var y=(x+1); y<temp_opts.length; y++)  {
+                if(temp_opts[x].text > temp_opts[y].text)  {
+                    temp = temp_opts[x].text;
+                    temp_opts[x].text = temp_opts[y].text;
+                    temp_opts[y].text = temp;
+                    temp = temp_opts[x].value;
+                    temp_opts[x].value = temp_opts[y].value;
+                    temp_opts[y].value = temp;
+                }
+            }
+        }
+        for(var i=0; i<box.options.length; i++)  {
+            box.options[i].value = temp_opts[i].value;
+            box.options[i].text = temp_opts[i].text;
+        }
+    }
+    
+    function getValue(value,inputId){
+      document.getElementById(inputId).value=value;
+     }
+    
+     </script>
+    
+    
+</head>
+
+<body>
+        <!-- start: Header -->
+    <div class="navbar">
+        <div class="navbar-inner">
+            <div class="container-fluid">
+                <a class="btn btn-navbar" data-toggle="collapse" data-target=".top-nav.nav-collapse,.sidebar-nav.nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </a>
+                <a class="brand" href="index.html"><span>主机安全管理</span></a>
+                                
+                <!-- start: Header Menu -->
+                <div class="nav-no-collapse header-nav">
+                    <ul class="nav pull-right">
+                        
+                        <!-- start: User Dropdown -->
+                        <li class="dropdown">
+                            <a class="btn dropdown-toggle" data-toggle="dropdown" href="#">
+                                <i class="halflings-icon white user"></i> 成德功
+                                <span class="caret"></span>
+                            </a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-menu-title">
+                                     <span>账户设置</span>
+                                </li>
+                                <li><a href="#"><i class="halflings-icon user"></i> 账户资料</a></li>
+                                <li><a href="login.html"><i class="halflings-icon off"></i> 退出</a></li>
+                            </ul>
+                        </li>
+                        <!-- end: User Dropdown -->
+                    </ul>
+                </div>
+                <!-- end: Header Menu -->
+                
+            </div>
+        </div>
+    </div>
+    
+    <!-- start: Header -->
+    <div class="container-fluid-full">
+    <div class="row-fluid">
+        <div id="sidebar-left" class="span2">
+            <div class="nav-collapse sidebar-nav">
+                <ul class="nav nav-tabs nav-stacked main-menu">
+                    <li><a href="/"><i class="icon-bar-chart"></i><span class="hidden-tablet">首页</span></a></li>
+                    <li>
+                        <a class="dropmenu" href="table.html"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> 主机管理</span></a>
+                        <ul>
+                            <li><a class="submenu" onclick="get_zjxx()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 主机概况</span></a></li>
+                            <li><a class="submenu" onclick="get_zjfz()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 主机分组</span></a></li>
+                            <li><a class="submenu" onclick="get_zjid()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 主机ID生成</span></a></li>
+                        </ul>    
+                    </li>
+                    <li>
+                        <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> 任务管理</span></a>
+                        <ul>
+                            <li><a class="submenu" onclick="get_rwxx()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 任务信息列表</span></a></li>
+                            <li><a class="submenu" onclick="rwdz()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 任务定制</span></a></li>
+                        </ul>    
+                    </li>
+                    <li>
+                        <a class="dropmenu" href="#"><i class="icon-folder-close-alt"></i><span class="hidden-tablet"> 告警管理</span></a>
+                        <ul>
+                            <li><a class="submenu" onclick="get_gjxx()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 告警信息列表</span></a></li>
+                            <li><a class="submenu" onclick="gjcl()"><i class="icon-file-alt"></i><span class="hidden-tablet"> 告警处理</span></a></li>
+                        </ul>    
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <!-- start: Content -->
+        <div id="content" class="span10">
+            <ul class="breadcrumb">
+                <li>
+                    <i class="icon-home"></i>
+                    <a href="index.html">目录</a> 
+                    <i class="icon-angle-right"></i>
+                </li>
+                <li><a href="#">首页</a></li>
+            </ul>
+            {% if not xyxx %}
+            <div class="row-fluid sortable">
+                <div class="box span3" style="border:None;" >
+                    <div id="piechart" class="graph" style="height:200px" ></div>
+                </div>
+                <div class="box span3" style="border:None;" >
+                    <div id="piechart1" class="graph" style="height:200px" ></div>
+                </div>
+                <div class="box span3" style="border:None;" >
+                    <div id="piechart2" class="graph" style="height:200px" ></div>
+                </div>
+                <div class="box span3" style="border:None;" >
+                    <div id="piechart3" class="graph" style="height:200px" ></div>
+                </div>
+            </div>
+            
+            <div class="row-fluid">    
+                <div class="box span12">
+                    <div class="box-header">
+                        <h2><i class="halflings-icon bullhorn"></i><span class="break"></span>告警信息</h2>
+                    </div>
+                    <div class="box-content alerts">
+                        {% for zjxx in zjxx_dic %}
+                            {% ifequal  zjxx.agent_state '02'  %}
+                                <div class="alert alert-error">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <h4 class="alert-heading">错误!   主机XXXXXX体检不合格，请检查!</h4>
+                                </div>
+                            {% endifequal %}
+                            {% ifequal  zjxx.agent_state '01'  %}
+                                 <div class="alert alert-block ">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <h4 class="alert-heading">警告!   主机XXXXXX体检不合格，请检查!</h4>
+                                </div>
+                            {% endifequal %}
+                            {% ifequal  zjxx.agent_state '00'  %}
+                                <div class="alert alert-success">
+                                    <button type="button" class="close" data-dismiss="alert">×</button>
+                                    <h4 class="alert-heading">成功!   主机XXXXXX体检成功，无异常!</h4>
+                                </div>
+                            {% endifequal %}
+                        {% endfor %}
+                    </div>
+                </div><!--/span-->
+            </div><!--/row-->
+            {% else %}
+                {{ xyxx }}
+            {% endif %}
+        </div>
+    </div>
+    </div>
+    <div class="modal hide fade" id="myModal">
+        <div class="modal-header">
+            <button type="button" class="close" data-dismiss="modal">×</button>
+            <h3>Settings</h3>
+        </div>
+        <div class="modal-body">
+            <p>Here settings can be configured...</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#" class="btn" data-dismiss="modal">Close</a>
+            <a href="#" class="btn btn-primary">Save changes</a>
+        </div>
+    </div>
+
+    <!-- start: JavaScript-->
+
+    <script src="/static/js/jquery-1.9.1.min.js"></script>
+    <script src="/static/js/jquery-migrate-1.0.0.min.js"></script>
+    <script src="/static/js/jquery-ui-1.10.0.custom.min.js"></script>
+    <script src="/static/js/jquery.ui.touch-punch.js"></script>
+    <script src="/static/js/modernizr.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/jquery.cookie.js"></script>
+    <script src='/static/js/fullcalendar.min.js'></script>
+    <script src='/static/js/jquery.dataTables.min.js'></script>
+    <script src="/static/js/excanvas.js"></script>
+    <script src="/static/js/jquery.flot.js"></script>
+    <script src="/static/js/jquery.flot.pie.js"></script>
+    <script src="/static/js/jquery.flot.stack.js"></script>
+    <script src="/static/js/jquery.flot.resize.min.js"></script>
+    <script src="/static/js/jquery.chosen.min.js"></script>
+    <script src="/static/js/jquery.uniform.min.js"></script>
+    <script src="/static/js/jquery.cleditor.min.js"></script>
+    <script src="/static/js/jquery.noty.js"></script>
+    <script src="/static/js/jquery.elfinder.min.js"></script>
+    <script src="/static/js/jquery.raty.min.js"></script>
+    <script src="/static/js/jquery.iphone.toggle.js"></script>
+    <script src="/static/js/jquery.uploadify-3.1.min.js"></script>
+    <script src="/static/js/jquery.gritter.min.js"></script>
+    <script src="/static/js/jquery.imagesloaded.js"></script>
+    <script src="/static/js/jquery.masonry.min.js"></script>
+    <script src="/static/js/jquery.knob.modified.js"></script>
+    <script src="/static/js/jquery.sparkline.min.js"></script>
+    <script src="/static/js/counter.js"></script>
+    <script src="/static/js/retina.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <!-- end: JavaScript-->
+    
+</body>
+</html>

@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机安全</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link href="/static/css/bootstrap.min.css" rel="stylesheet" media="screen">
+    <link href="/static/css/bootstrap-datetimepicker.min.css" rel="stylesheet" media="screen">
+    <!-- end: CSS -->
+    <script type="text/javascript" src="/static/js/jquery-1.8.3.min.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/static/js/bootstrap.min.js"></script>
+    <script type="text/javascript" src="/static/js/bootstrap-datetimepicker.js" charset="UTF-8"></script>
+    <script type="text/javascript" src="/static/js/locales/bootstrap-datetimepicker.zh-CN.js" charset="UTF-8"></script>
+</head>
+
+<body>
+
+            <div class="row-fluid sortable" id='taskadd'>
+                    <div class="box-header" data-original-title>
+                        <h2><i class="halflings-icon edit"></i><span class="break"></span>编辑任务</h2>
+                    </div>
+                    <div class="box-content">
+                        <div class="form-horizontal">
+                            <fieldset>
+                              <div class="control-group">
+                                <label class="control-label" for="rwmc">任务名称</label>
+                                <div class="controls">
+                                  <input class="input-xlarge focused" id="rwmc" type="text"  value="{{ rwmc }}">
+                                </div>
+                              </div>
+                              <div class="control-group">
+                                <label class="control-label" for="rwms">任务描述</label>
+                                <div class="controls">
+                                  <input class="input-xlarge focused" id="rwms" type="text" value="{{ rwms }}">
+                                </div>
+                              </div>
+                              <div class="control-group">
+                                <label class="control-label" for="circle">任务周期</label>
+                                <div class="controls">
+                                  <select id="circle" onchange="do_select(this.value)">
+                                    <option value='1'>每天一次</option>
+                                    <option value='2'>每周一次</option>
+                                    <option value='3'>每月一次</option>
+                                    <!--
+                                        <option value='0'>一次性</option>
+                                        <option value='4'>每季度一次</option>
+                                        <option value='5'>每年一次</option>
+                                    -->
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="control-group"  id="date1" style="display:none;" >
+                                  <label class="control-label">执行时间</label>
+                                  <div class="controls input-append date form_datetime1" style="margin: 10px 10px 10px 10px;" data-date-format="hh:ii" data-link-field="dtp_input1">
+                                      <input size="25" type="text" value=""  id="date_time1" readonly>
+                                      <span class="add-on"><i class="icon-remove"></i></span>
+                                      <span class="add-on"><i class="icon-th"></i></span>
+                                  </div>
+                                  <input type="hidden" id="dtp_input1" value="" />
+                              </div>
+
+                              <div class="control-group" id='week' style="display:none;">
+                                <label class="control-label" for="circle_week">星期1-7</label>
+                                <div class="controls">
+                                  <select id="circle_week"  >
+                                    <option value='1'>星期一</option>
+                                    <option value='2'>星期二</option>
+                                    <option value='3'>星期三</option>
+                                    <option value='4'>星期四</option>
+                                    <option value='5'>星期五</option>
+                                    <option value='6'>星期六</option>
+                                    <option value='7'>星期日</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="control-group"  id="date2" style="display:none;" >
+                                  <label class="control-label">执行时间</label>
+                                  <div class="controls input-append date form_datetime2" style="margin: 10px 10px 10px 10px;" data-date-format="yyyy-mm-dd hh:ii" data-link-field="dtp_input2">
+                                      <input size="25" type="text" value=""  id="date_time2" readonly>
+                                      <span class="add-on"><i class="icon-remove"></i></span>
+                                      <span class="add-on"><i class="icon-th"></i></span>
+                                  </div>
+                                  <input type="hidden" id="dtp_input2" value="" /><br/>
+                              </div>
+                              <div class="control-group">
+                                <label class="control-label" for="state">任务状态</label>
+                                <div class="controls">
+                                  <select id="state" value="{{ state }}">
+                                    <option value='1'>启动</option>
+                                    <option value='0'>暂停</option>
+                                  </select>
+                                </div>
+                              </div>
+                              <div class="control-group">
+                                <label class="control-label" for="select_module">任务模板:</label>
+                                <div class="controls">
+                                  <select id="select_module" data-rel="chosen" value="{{ select_module }}">
+                                  {% for module in ls_module %}
+                                    <option value="{{ module.module_id}}">任务模板 {{ module.module_name}}</option>
+                                  {% endfor %}
+                                  </select>
+                                </div>
+                              </div>
+                              
+                              <div class="control-group">
+                                  <div class="form-actions">
+                                    <button class="btn btn-primary" onclick="task_edit();" >添加</button>
+                                    <button class="btn" onclick="javascript:window.close();" >取消</button>
+                                  </div>
+                              </div>
+                              <input  type="hidden" id="id" value="{{ id }}">
+                            </fieldset>
+                        </div>
+                    </div>
+                </div><!--/span-->
+<script type="text/javascript">
+    ss = '{{ circle }}'
+    var selected = document.getElementById("circle");
+    for(i=0;i<selected.options.length;i++){
+         if(selected.options[i].value == ss){
+                selected.options[i].selected = true;
+         }
+    }
+    if(ss=='1'){
+        document.getElementById("date1").style.display = "block";
+        document.getElementById("date_time1").value = '{{ date_time1 }}'
+    }
+    if(ss=='2'){
+        document.getElementById("week").style.display = "block";
+        document.getElementById("date_time1").value = '{{ date_time1 }}'
+        var selected = document.getElementById("circle_week");
+        if('{{ date_week }}'){
+            for(i=0;i<selected.options.length;i++){
+                 if(selected.options[i].value == '{{ date_week }}'){
+                        selected.options[i].selected = true;
+                 }
+            }
+        }
+    } 
+    if(ss=='3'){
+        document.getElementById("date2").style.display = "block";
+        document.getElementById("date_time2").value = '{{ date_time2 }}'
+    } 
+
+    function sync_post( url , data ) {
+        /*
+        同步POST
+        同步方式操作ajax，返回值同call_python，为一个字典:
+        其中-> ret 0 失败 1 成功
+                当ret==1 时，val为ajax返回的json对象
+                当ret==0 时，exc为错误内容：null，"timeout", "error", "notmodified" 和 "parsererror"
+        用法举例：
+            ret = sync_post( "/cx/jgxx/", { "hh": hh} )
+            if ( ret.ret ){
+                set_value( 'jgmc' , ret.val );
+            } else {
+                set_status( "获取行名出错：" + ret.exc );
+            }
+        */
+        var retval = { ret: 0 }
+        jQuery.ajax( {
+            async: false,  //同步 异步为true
+            type: 'POST',
+            url: url,
+            data: data,
+            cache: false,
+            contentType: "application/x-www-form-urlencoded;charset=utf-8", 
+            dataType:"json",
+            //成功
+            success:function( json ){
+                retval.ret = 1
+                retval.val = json;
+            },
+            //错误
+            error: function( XMLHttpRequest, textStatus, errorThrown ){
+                //更新交易页面框架信息 statusbar
+                retval.ret = 0;
+                retval.exc = textStatus;
+            }
+        } );
+        return retval;
+    }
+    
+    //编辑任务
+    function task_edit(){
+        var id = document.getElementById("id").value;
+        var rwmc = document.getElementById("rwmc");
+        var rwms = document.getElementById("rwms");
+        var circle = document.getElementById("circle");
+        var start_time = ''
+        if(circle.value=='1'){
+            t_time = document.getElementById("dtp_input1").value;
+            if( t_time=='null'||t_time==''){
+                alert("请选择执行时间！");
+                document.getElementById("dtp_input1").focus();
+                return false;
+            }
+            start_time = t_time.substr(11 ,5) + ':00';
+        }
+        if(circle.value=='2'){
+            t_time = document.getElementById("dtp_input1").value;
+            if( t_time=='null'||t_time==''){
+                alert("请选择执行时间！");
+                document.getElementById("dtp_input1").focus();
+                return false;
+            }
+            week = document.getElementById("circle_week").value
+            if( week=='null'||week==''){
+                alert("请选择星期数！");
+                document.getElementById("circle_week").focus();
+                return false;
+            }
+            start_time = week + '-' + t_time.substr(11 ,6) + ':00';
+        }
+        if(circle.value=='3'){
+            t_time = document.getElementById("dtp_input2").value;
+            alert(t_time);
+            if( t_time=='null'||t_time==''){
+                alert("请选择星期数！");
+                document.getElementById("dtp_input2").focus();
+                return false;
+            }
+            start_time =  t_time; //只有周期为每月的情况下start_time是标准日期
+        }
+        if(!start_time){
+            alert("获取任务执行时间错误！");
+            return false;
+        }
+        var state = document.getElementById("state");
+        var select_module = document.getElementById("select_module");
+        if( rwmc.value=='null'||rwmc.value==''){
+            alert("请填写任务名称！");
+            rwmc.focus();
+            return false;
+        }
+        if( rwms.value=='null'||rwms.value==''){
+            alert("请填写任务描述！");
+            rwms.focus();
+            return false;
+        }
+        rr = sync_post( "/task_edit/" , {"id":id,"rwmc":rwmc.value,"rwms":rwms.value,"circle":circle.value,"start_time":start_time,"state":state.value,"select_module":select_module.value} );
+        if ( rr.ret ) {
+            json = rr.val;
+            if(json.xym=='000000'){
+                alert(json.xyxx);
+                window.opener.location.reload(); 
+                window.close();
+                return true;
+            }else{
+                alert(json.xyxx);
+                return false;
+            }
+        } else {
+            alert("操作失败，请联系管理员");
+            return false;
+        }
+    }
+    function do_select(circle){
+        if(circle=='1'){
+            document.getElementById("date1").style.display = "block";
+            document.getElementById("week").style.display = "none";
+            document.getElementById("date2").style.display = "none";
+        }
+        if(circle=='2'){
+            document.getElementById("week").style.display = "block";
+            document.getElementById("date1").style.display = "block";
+            document.getElementById("date2").style.display = "none";
+        }
+        if(circle=='3'){
+            document.getElementById("date1").style.display = "none";
+            document.getElementById("week").style.display = "none";
+            document.getElementById("date2").style.display = "block";
+        }
+    }
+    //每天一次
+    $('.form_datetime1').datetimepicker({
+        language:  'zh-CN',//选择语言，前提是该语言已导入
+        todayBtn:  0,//是否在底部显示“今天”按钮
+        autoclose: true,//当选择一个日期之后是否立即关闭此日期时间选择器
+        minuteStep : 10,//分钟的间隔
+        initialDate:new Date(),//初始化的时间
+        startView: 0,//点开插件后显示的界面。0、小时1、天2、月3、年4、十年，默认值2
+        forceParse: 0,//当选择器关闭的时候，是否强制解析输入框中的值。也就是说，当用户在输入框中输入了不正确的日期，选择器将会尽量解析输入的值，并将解析后的正确值按照给定的格式format设置到输入框中
+        showMeridian: true,//是否加上网格
+        pickerPosition:"bottom-left",//显示的位置，还支持bottom-right
+        keyboardNavigation : true//是否允许键盘选择时间
+    });
+    //每月一次
+    $('.form_datetime2').datetimepicker({
+        language:  'zh-CN',
+        weekStart: 0,//一周从哪一天开始。0（星期日）到6（星期六）,默认值0
+        todayBtn:  0,
+        autoclose: true,
+        minuteStep : 10,//分钟的间隔
+        initialDate:new Date(),
+        todayHighlight: true,//是否高亮当前时间
+        startView: 2,
+        forceParse: 0,
+        showMeridian: true,
+        pickerPosition:"bottom-left",
+        keyboardNavigation : true
+    });
+</script>
+            
+</body>
+</html>

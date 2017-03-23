@@ -1,0 +1,813 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机安全</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link id="bootstrap-style" href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="/static/css/style.css" rel="stylesheet">
+    <link id="base-style-responsive" href="/static/css/style-responsive.css" rel="stylesheet">
+    <!-- end: CSS -->
+    <script src="/static/js/jquery-1.9.1.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/bootstrap.js"></script>
+    <script src="/static/js/mycookies.js"></script>
+    <script src="/static/js/custom.js"></script>
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="/static/js/html5.js"></script>
+        <link id="ie-style" href="/static/css/ie.css" rel="stylesheet">
+    <![endif]-->
+    
+    <!--[if IE 9]>
+        <link id="ie9style" href="/static/css/ie9.css" rel="stylesheet">
+    <![endif]-->
+        
+    <!-- start: Favicon -->
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <!-- end: Favicon -->
+    
+    <style>  
+        div.graph  
+                {  
+                    width: 280px;  
+                    height: 200px;  
+                }
+        .table th, .table td { 
+            text-align: left; 
+            height:38px;
+        }
+    </style>  
+    <script type="text/javascript">
+    function get_tjxx(agent_id, task_id, scheme_time, ip_addr, mac_addr, os_fullname, db_type, middleware_type){
+        url = '/zjxx_check_detail_info/?agent_id=' + agent_id+'&task_id=' + task_id+'&scheme_time=' + scheme_time+'&ip_addr=' + ip_addr+'&mac_addr=' + mac_addr+'&os_fullname=' + os_fullname+'&db_type=' + db_type+'&middleware_type=' + middleware_type;
+        var winOpen =window.showModalDialog(url,window,'edge:raised;scroll:0;status:0;help:0;resizable:1;dialogWidth:1000px;dialogHeight:1000px;dialogLeft:200px, dialogTop:0px;'); 
+        if(!has_showModalDialog) return;//chrome 返回 因为showModalDialog是阻塞的 open不一样;  
+    }
+    </script>
+</head>
+
+<body>
+     
+    <div class="container-fluid">
+        <div class="row-fluid sortable">
+            {% if no_result %}
+            <div class="box-header" data-original-title>
+                <h2><i class="halflings-icon list"></i><span class="break"></span>1 主机体检结论及建议</h2>
+            </div>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <tbody>
+                        <tr>
+                            <th style="height:10px;" ><h2>{{ no_result.ms }}!!!</h2></th>
+                        </tr>
+                    </tbody> 
+                    
+                </table>
+            </div><!--/row --> 
+            {% else %}
+            <div class="box-header" data-original-title>
+                <h2><i class="halflings-icon list"></i><span class="break"></span>1 主机体检结论及建议</h2>
+            </div>
+            <div class="box-content">
+                <dl>
+                  <dt><h2>1.1 主机体检结论</h2></dt>
+                  <dd><h3>
+                      {{ date_dic.year }}年{{ date_dic.month }}月{{ date_dic.day }}日,对{{ ls1.task_name }}进行了主机体检,其中任务类型为
+                      {% ifequal ls1.task_circle '0' %}
+                      一次性任务
+                      {% endifequal %}
+                      {% ifequal ls1.task_circle '1' %}
+                      每天执行一次
+                      {% endifequal %}
+                      {% ifequal ls1.task_circle '2' %}
+                      每周执行一次
+                      {% endifequal %}
+                      {% ifequal ls1.task_circle '3' %}
+                      每月执行一次
+                      {% endifequal %}
+                      ,体检模板为{{ ls1.task_module }}。<br>
+                      体检涉及{{ ls2.count }}台主机,其中
+                      {% for l in ls_zjs  %}
+                          {{ l.second_pro }} {{ l.count }}台,
+                      {% endfor %}
+                      <br>
+                      通过此次主机体检,发现{{ ls2.unpass_cnt }}台主机没有通过基线核查,主机ID分别为
+                      {% for ll in ls3  %}
+                          {{ ll.agent_id }},
+                      {% endfor %}
+                      <br>
+                      {% if ls4 %}
+                      未通过项目中,
+                      {% for lll in ls4  %}
+                          {{ lll.second_pro }}中{{ lll.third_pro }}排名第{{ lll.orderno }}名,危害程度为极度危害；
+                      {% endfor %}
+                      {% endif %}
+                      <br>
+                      {% if ls5 %}
+                      极度危害的项目中,
+                      {% for llll in ls5  %}
+                          {{ llll.second_pro }}中{{ llll.third_pro }}未通过比例为{{ llll.counts }};
+                      {% endfor %}
+                      {% endif %}
+                  </h3></dd>
+                  <dt><h2>1.2 安全建议</h2></dt>
+                  <dd><h3> 针对本次体检结果,特提出如下建议：<br>
+                  1、参考产品提供的配置建议和解决方案进行系统安全加固。<br>
+                  2、采用本产品进行周期性体检,定期对资产安全配置进行评估,及时发现问题。
+                  </h3></dd>
+                </dl>            
+            </div>
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">2 任务概述</span></h2>
+            </div>
+            <h2>2.1 任务基本信息</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable" >
+                    <tbody>
+                        <tr>
+                            <th style="height:10px;" >任务名称</th>
+                            <th style="height:10px;" >{{ ls1.task_name }} </th>
+                        </tr>
+                        <tr>
+                            <th style="height:10px">任务ID</th>
+                            <th style="height:10px">{{ ls1.task_id }}</th>
+                        </tr>
+                        <tr>
+                            <th style="height:10px">任务类型</th>
+                            {% ifequal ls1.task_circle '0' %}
+                            <th style="height:10px">一次性任务</th>
+                            {% endifequal %}
+                            {% ifequal ls1.task_circle '1' %}
+                            <th style="height:10px">每天执行一次</th>
+                            {% endifequal %}
+                            {% ifequal ls1.task_circle '2' %}
+                            <th style="height:10px">每周执行一次</th>
+                            {% endifequal %}
+                            {% ifequal ls1.task_circle '3' %}
+                            <th style="height:10px">每月执行一次</th>
+                            {% endifequal %}
+                        </tr>
+                        <tr>
+                            <th style="height:10px">体检模板</th>
+                            <th style="height:10px">{{ ls1.task_module }}</th>
+                        </tr>
+                        <tr>
+                            <th style="height:10px">分配任务的用户</th>
+                            <th style="height:10px">{{ ls1.task_user_join }}</th>
+                        </tr>
+                        <tr>
+                            <th style="height:10px">在线主机数</th>
+                            <th style="height:10px">{{ ls2.count }}</th>
+                        </tr>
+                        <tr>
+                            <th style="height:10px">已提交报告的主机数</th>
+                            <th style="height:10px">{{ ls2.count }}</th>
+                        </tr>
+                    </tbody> 
+                    
+                </table>
+            </div><!--/row --> 
+            <h2>2.2 体检目标信息</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                
+                    <thead>
+                        <tr>
+                            <th>主机ID</th>
+                            <th>IP地址</th>
+                            <th>MAC地址</th>
+                            <th>操作系统</th>
+                            <th>运行的数据库</th>
+                            <th>运行的中间件</th>
+                            <th>检查起始时间</th>
+                        </tr>
+                    </thead> 
+                    {% if dic6 %}  
+                    <tbody>
+                        {% for zjxx in dic6 %}
+                        <tr>
+                            <td class="center"><h2>{{ zjxx.agent_id }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.ip_addr }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.mac_addr }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.os_fullname }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.db_type }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.middleware_type }}</h2></td>
+                            <td class="center"><h2>{{ zjxx.scheme_time }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">3 配置分布</span></h2>
+            </div>
+            <h2>3.1 主机配置情况统计</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                
+                    <thead>
+                        <tr>
+                            <th>配置</th>
+                            <th>主机数量</th>
+                        </tr>
+                    </thead> 
+                    {% if ls_zjs %}  
+                    <tbody>
+                        {% for zjs in ls_zjs %}
+                        <tr>
+                            <td class="center"><h2>{{ zjs.second_pro }}</h2></td>
+                            <td class="center"><h2>{{ zjs.count }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>--</td>
+                            <td class="center"><h2>--</td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">4 主机统计</span></h2>
+            </div>
+            <h2>4.1 主机核查项目分布</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                
+                    <thead>
+                        <tr>
+                            <th>主机ID</th>
+                            <th>一级项目名称</th>
+                            <th>二级项目名称</th>
+                            <th>三级项目数量</th>
+                            <th>四级项目数量</th>
+                        </tr>
+                    </thead> 
+                    {% if ls_zjfb_count %}  
+                    <tbody>
+                        {% for zjfb in ls_zjfb_count %}
+                        <tr>
+                            <td class="center"><h2>{{ zjfb.agent_id }}</h2></td>
+                            <td class="center"><h2>{{ zjfb.fst_pro }}</h2></td>
+                            <td class="center"><h2>{{ zjfb.sec_pro }}</h2></td>
+                            <td class="center"><h2>{{ zjfb.third_pro_count }}</h2></td>
+                            <td class="center"><h2>{{ zjfb.check_item_count }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                            <td class="center"><h2>--</h2></td>
+                        </tr>
+                    </tbody>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            <h2>4.2 主机核查结果统计</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable" >
+                    <thead>
+                        <tr>
+                            <th>主机ID</th>
+                            <th>体检项目总数</th>
+                            <th>合格项目数</th>
+                            <th>不合格项目数</th>
+                            <th>未检查项目数</th>
+                        </tr>
+                    </thead> 
+                    {% if ls_xm_count %}  
+                        <tbody>
+                            {% for count_info in ls_xm_count %}
+                            <tr>
+                                <td class="center"><h2>{{ count_info.agent_id }}</h2></td>
+                                {% if count_info.count %}  
+                                    <td class="center"><h2>{{ count_info.xm_count }}</h2></td>
+                                {% else %}
+                                    <td class="center"><h2>0</h2></td>
+                                {% endif%}
+                                
+                                {% if count_info.pass_count %}  
+                                    <td class="center"><h2>{{ count_info.pass_count }}</h2></td>
+                                {% else %}
+                                    <td class="center"><h2>0</h2></td>
+                                {% endif%}
+                                
+                                {% if count_info.unpass_count %}  
+                                    <td class="center"><h2>{{ count_info.unpass_count }}</h2></td>
+                                {% else %}
+                                    <td class="center"><h2>0</h2></td>
+                                {% endif%}
+                                
+                                {% if  count_info.uncheck_count %}  
+                                    <td class="center"><h2>{{  count_info.uncheck_count }}</h2></td>
+                                {% else %}
+                                    <td class="center"><h2>0</h2></td>
+                                {% endif%}
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <tbody>
+                            <tr>
+                                <td class="center"><h2>--</h2></td>
+                                <td class="center"><h2>--</h2></td>
+                                <td class="center"><h2>--</h2></td>
+                                <td class="center"><h2>--</h2></td>
+                                <td class="center"><h2>--</h2></td>
+                            </tr>
+                        </tbody>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            <h2>4.3 主机不合格项目分布</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>主机ID</th>
+                            <th>未通过的项目数</th>
+                            <!--需要循环展示二级项目-->
+                            {% for fb in ls_fb_unpass %}
+                                <th>{{ fb.second_pro }}</th>
+                            {% endfor %}
+                        </tr>
+                    </thead> 
+                    {% if ls_cpfb_unpass %}  
+                    <tbody>
+                        {% for cpfb in ls_cpfb_unpass %}
+                        <tr>
+                            <td class="center"><h2>{{ cpfb.agent_id }}</h2></td>
+                            <td class="center"><h2>{{ cpfb.unpass_count }}</h2></td>
+                            {% for fb in ls_fb_unpass %}
+                                {% for fb1 in cpfb.ls %}
+                                    {% ifequal fb.second_pro fb1.second_pro %}  
+                                        <td class="center"><h2>{{ fb1.count }}</h2></td>
+                                    {% endifequal %}
+                                {% endfor %}
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                {% else %}
+                    <td class="center"><h2>无</td>
+                {% endif %}
+                </table>
+            </div><!--/row --> 
+            
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">5 核查项目统计</span></h2>
+            </div>
+            <h2>5.1 未通过项目-排名前三位的三级项目</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>三级项目</th>
+                            <th>危害程度</th>
+                            <th>所属的二级项目</th>
+                            <th>出现的比例</th>
+                        </tr>
+                    </thead> 
+                    {% if ls10 %}  
+                    <tbody>
+                        {% for l in ls10 %}
+                        <tr>
+                            <td class="center"><h2>{{ l.orderno }}</h2></td>
+                            <td class="center"><h2>{{ l.third_pro }}</h2></td>
+                            {% ifequal l.threat_level '5' %}  
+                                <td class="center"><h2>极度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '4' %}  
+                                <td class="center"><h2>高度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '3' %}  
+                                <td class="center"><h2>中度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '2' %}  
+                                <td class="center"><h2>低度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '1' %}  
+                                <td class="center"><h2>比较安全</h2></td>
+                            {% endifequal %}
+                            <td class="center"><h2>{{ l.second_pro }}</h2></td>
+                            <td class="center"><h2>{{ l.counts }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                {% else %}
+                    <td class="center"><h2>无</td>
+                {% endif %}
+                </table>
+            </div><!--/row --> 
+            <h2>5.2 未通过项目-排名前三位的四级项目</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>四级项目</th>
+                            <th>危害程度</th>
+                            <th>所属的二级项目</th>
+                            <th>出现的比例</th>
+                        </tr>
+                    </thead> 
+                    {% if ls11 %}  
+                    <tbody>
+                        {% for l in ls11 %}
+                        <tr>
+                            <td class="center"><h2>{{ l.orderno }}</h2></td>
+                            <td class="center"><h2>{{ l.check_item }}</h2></td>
+                            {% ifequal l.threat_level '5' %}  
+                                <td class="center"><h2>极度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '4' %}  
+                                <td class="center"><h2>高度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '3' %}  
+                                <td class="center"><h2>中度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '2' %}  
+                                <td class="center"><h2>低度危害</h2></td>
+                            {% endifequal %}
+                            {% ifequal l.threat_level '1' %}  
+                                <td class="center"><h2>比较安全</h2></td>
+                            {% endifequal %}
+                            <td class="center"><h2>{{ l.second_pro }}</h2></td>
+                            <td class="center"><h2>{{ l.counts }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                {% else %}
+                    <td class="center"><h2>无</td>
+                {% endif %}
+                </table>
+            </div><!--/row --> 
+            <h2>5.3 极度危害的三级项目</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>三级项目</th>
+                            <th>危害程度</th>
+                            <th>所属的二级项目</th>
+                            <th>通过的比例</th>
+                            <th>未通过的比例</th>
+                        </tr>
+                    </thead> 
+                    {% if ls14 %}  
+                    <tbody>
+                        {% for ls in ls14 %}
+                        <tr>
+                            <td class="center"><h2>{{ ls.orderno }}</h2></td>
+                            <td class="center"><h2>{{ ls.third_pro }}</h2></td>
+                            <td class="center"><h2>极度危害</h2></td>
+                            <td class="center"><h2>{{ ls.second_pro }}</h2></td>
+                            <td class="center"><h2>{{ ls.pass_count }}</h2></td>
+                            <td class="center"><h2>{{ ls.unpass_count }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                        <td class="center"><h2>无</td>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            <h2>5.4 极度危害的四级项目</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>四级项目</th>
+                            <th>危害程度</th>
+                            <th>所属的二级项目</th>
+                            <th>通过的比例</th>
+                            <th>未通过的比例</th>
+                        </tr>
+                    </thead> 
+                    {% if ls18 %}  
+                    <tbody>
+                        {% for ls in ls18 %}
+                        <tr>
+                            <td class="center"><h2>{{ ls.orderno }}</h2></td>
+                            <td class="center"><h2>{{ ls.check_item }}</h2></td>
+                            <td class="center"><h2>极度危害</h2></td>
+                            <td class="center"><h2>{{ ls.second_pro }}</h2></td>
+                            <td class="center"><h2>{{ ls.pass_count }}</h2></td>
+                            <td class="center"><h2>{{ ls.unpass_count }}</h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                        <td class="center"><h2>无</td>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">6 主机配置核查结果明细</span></h2>
+            </div>
+            <h2>6.1 核查结果明细信息</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>主机ID</th>
+                            <th>单主机体检报告</th>
+                        </tr>
+                    </thead> 
+                    {% if tjxx_lst %}  
+                    <tbody>
+                        {% for ls in tjxx_lst %}
+                        <tr>
+                            <td class="center"><h2>{{ ls.agent_id }}</h2></td>
+                            <td class="center"><h2><a onclick="get_tjxx('{{ ls.agent_id }}','{{ ls.task_id }}','{{ ls.scheme_time }}','{{ ls.ip_addr }}','{{ ls.mac_addr }}','{{ ls.os_fullname }}','{{ ls.db_type }}','{{ ls.middleware_type }}');">{{ ls.name }}</a></h2></td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                    {% else %}
+                        <td class="center"><h2>无</td>
+                    {% endif %}
+                </table>
+            </div><!--/row --> 
+            {% endif %}
+            
+            <div class="box-header">
+                <h2><i class="halflings-icon file"></i><span class="break">7 附录</span></h2>
+            </div>
+            <h2>7.1 核查项目与对主机危害程度的关系</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>序号</th>
+                            <th>三级项目</th>
+                            <th>危害程度</th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>1</h2></td>
+                            <td class="center"><h2>账号、授权、口令</h2></td>
+                            <td class="center"><h2>极度危害</h2></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="center"><h2>2</h2></td>
+                            <td class="center"><h2>安全补丁、防护软件、防病毒软件、不必要的服务、启动项、关闭自动播放功能、共享文件夹、网络访问、注册表设置、远程登陆、FTP设置、删除潜在危险文件、拒绝服务防范、IP协议</h2></td>
+                            <td class="center"><h2>高度危害</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>3</h2></td>
+                            <td class="center"><h2>系统Banner设置、、数据传输安全、错误页面重定向、禁止列表显示文件、隐藏版本信息</h2></td>
+                            <td class="center"><h2>中度危害</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>4</h2></td>
+                            <td class="center"><h2>日志、超时设置</h2></td>
+                            <td class="center"><h2>低度危害</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>5</h2></td>
+                            <td class="center"><h2>使用NTFS文件系统、可信IP地址访问控制、Listener安全</h2></td>
+                            <td class="center"><h2>比较安全</h2></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!--/row --> 
+            
+            
+            <h2>7.2 危害程度定义</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>危害程度</th>
+                            <th>定义</th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>极度危害</h2></td>
+                            <td class="center"><h2>错误配置可能导致攻击者成功登录系统,对主机造成特别重大的危害</h2></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="center"><h2>高度危害</h2></td>
+                            <td class="center"><h2>错误配置可能导致系统存在安全漏洞,被攻击者利用后对主机造成重大的危害。</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>中度危害</h2></td>
+                            <td class="center"><h2>错误配置可能导致系统关键信息泄露。</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>低度危害</h2></td>
+                            <td class="center"><h2>错误配置可能导致系统被攻击或被不怀好意的人使用而用户无感。</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>比较安全</h2></td>
+                            <td class="center"><h2>对主机不会造成明显危害。</h2></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!--/row --> 
+            
+            
+            <h2>7.3 核查项目分类标准</h2>
+            <h3>参考YDT 2701-2014核查标准中对配置项目的分类。</h3>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th><h2>项目分类</h2></th>
+                            <th><h2>定义</h2></th>
+                        </tr>
+                    </thead> 
+                    <tbody>
+                        <tr>
+                            <td class="center"><h2>一级项目</h2></td>
+                            <td class="center"><h2>最大的类别,如OS、DB、Middleware</h2></td>
+                        </tr>
+                        
+                        <tr>
+                            <td class="center"><h2>二级项目</h2></td>
+                            <td class="center"><h2>在一级项目下再次进行细分,如Linux、Windows、Mysql、Oracle、Apache等</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>三级项目</h2></td>
+                            <td class="center"><h2>在二级项目下再次进行细分,如口令、账号、授权等</h2></td>
+                        </tr>
+                        <tr>
+                            <td class="center"><h2>四级项目</h2></td>
+                            <td class="center"><h2>在三级项目下再次进行细分,如检查口令的最大长度等。</h2></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div><!--/row --> 
+            
+            
+            <div class="box-header" data-original-title>
+                <h2><i class="halflings-icon list"></i><span class="break"></span>7.4 主机配置核查标准</h2>
+            </div>
+            <div class="box-content">
+                <dl>
+                  <dt><h2>标准</h2></dt>
+                  <dd> 
+                        <h2>1、《YDT 2701-2014 电信网和互联网安全防护基线配置要求及检测要求 操作系统;</h2><br>
+                        <h2>2、《YDT 2700-2014 电信网和互联网安全防护基线配置要求及检测要求 数据库》;</h2><br>
+                        <h2>3、《YDT 2702-2014 电信网和互联网安全防护基线配置要求及检测要求 中间件》;</h2><br>
+                  </dd>
+                </dl>            
+            </div>
+            
+            
+            <h2>7.5 产品不提供核查功能的项目列表</h2>
+            <div class="box-content">
+                <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    <thead>
+                        <tr>
+                            <th>一级项目</th>
+                            <th>二级项目</th>
+                            <th>三级项目</th>
+                            <th>四级项目</th>
+                            <th>处理建议</th>
+                        </tr>
+                    </thead> 
+                        <tbody>
+                            <tr>
+                            <td class="center"><h2>OS</h2></td><td class="center"><h2>Linux</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>根据业务需求,建立多帐户组,并将用户账号分配到相应的账号组</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>OS</h2></td><td class="center"><h2>Linux</h2></td><td class="center"><h2>安全补丁</h2></td><td class="center"><h2>选择更新使用最新版本的补丁</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>OS</h2></td><td class="center"><h2>Linux</h2></td><td class="center"><h2>FTP设置</h2></td><td class="center"><h2>修改FTP banner信息</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>按照用户分配账号,避免不同用户间共享账号,删除过期账户</h2></td><td class="center"><h2>手工或用户提供登陆mysql的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>应删除或锁定与数据库运行、维护等工作无关的账号</h2></td><td class="center"><h2>手工或用户提供登陆mysql的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>授权</h2></td><td class="center"><h2>在数据库权限配置能力内,根据用户的业务需要,配置其所需的最小权限</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>口令</h2></td><td class="center"><h2>检查帐户默认密码和弱密码</h2></td><td class="center"><h2>另行开发工具</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>安全补丁</h2></td><td class="center"><h2>在保证业务可用性的前提下,经过分析测试后,可以选择更新使用最新版本的补丁</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>网络连接</h2></td><td class="center"><h2>判断是否需要禁止网络连接,如需禁止,进行相关配置</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>MySQL</h2></td><td class="center"><h2>可信IP地址访问控制</h2></td><td class="center"><h2>通过数据库所在操作系统或防火墙限制,只有信任的IP地址才能通过监听器访问数据库</h2></td><td class="center"><h2>手工或用户提供登陆mysql的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>应按照用户分配账号,避免不同用户间共享账号</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>应删除或锁定与数据库运行、维护等工作无关的账号,删除过期账号</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>禁止以管理员帐号权限运行oracle</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>启用数据字典保护,只有SYSDBA用户才能访问数据字典基础表</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>授权</h2></td><td class="center"><h2>在数据库权限配置能力内,根据用户的业务需要,配置其所需的最小权限</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>授权</h2></td><td class="center"><h2>限制具备数据库超级管理员(SYSDBA)权限的用户远程登录</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>授权</h2></td><td class="center"><h2>使用数据库角色(ROLE)来管理对象的权限</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>口令</h2></td><td class="center"><h2>对于采用静态口令进行认证的数据库,口令长度至少8位,并包括数字、小写字母、大写字母和特殊符号4类中至少3类</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>口令</h2></td><td class="center"><h2>对于采用静态口令认证技术的数据库,应配置数据库,使用户不能重复使用最近5次(含5次)内已使用的口令</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>口令</h2></td><td class="center"><h2>对于采用静态口令认证技术的数据库,应配置当用户连续认证失败次数超过6次(不含6次),采取相应警示或增强验证等措施</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>口令</h2></td><td class="center"><h2>不能使用默认密码的账户登陆到数据库,手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>口令</h2></td><td class="center"><h2>不能以用户名作为密码登陆到数据库</h2></td><td class="center"><h2>另行开发工具</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>日志</h2></td><td class="center"><h2>数据库应配置日志功能,对用户登录信息进行记录</h2></td><td class="center"><h2>由于Oracle采用命令方式创建日志,无法对该项进行核查</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>日志</h2></td><td class="center"><h2>数据库应配置日志功能,记录用户对数据库的操作</h2></td><td class="center"><h2>由于Oracle采用命令方式创建日志,无法对该项进行核查</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>日志</h2></td><td class="center"><h2>根据业务要求制定数据库审计策略</h2></td><td class="center"><h2>手工或用户提供登陆Oracle的超级管理员信息</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>DB</h2></td><td class="center"><h2>Oracle</h2></td><td class="center"><h2>安全补丁</h2></td><td class="center"><h2>安装了最新的安全补丁</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>Middleware</h2></td><td class="center"><h2>Apache</h2></td><td class="center"><h2>其他</h2></td><td class="center"><h2>删除缺省安装的无用文件</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>Middleware</h2></td><td class="center"><h2>Weblogic</h2></td><td class="center"><h2>授权</h2></td><td class="center"><h2>在设备权限配置能力内,根据用户的业务需要,配置其所需的最小权限</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>Middleware</h2></td><td class="center"><h2>Tomcat</h2></td><td class="center"><h2>账号</h2></td><td class="center"><h2>应删除或锁定与设备运行、维护等工作无关的账号</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                            <tr>
+                            <td class="center"><h2>Middleware</h2></td><td class="center"><h2>Tomcat</h2></td><td class="center"><h2>授权</h2></td><td class="center"><h2>在设备权限配置能力内,根据用户的业务需要配置其所需的最小权限</h2></td><td class="center"><h2>手工</h2></td>
+                            </tr>
+                    </tbody>
+                </table>
+            </div><!--/row --> 
+        </div><!--/span-->
+        
+    </div>
+    </div>
+    <!-- end: row -->
+            
+</body>
+</html>

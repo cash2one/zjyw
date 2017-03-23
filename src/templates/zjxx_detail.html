@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+    <!-- start: Meta -->
+    <meta charset="UTF-8">
+    <title>主机安全</title>
+    <meta name="description" content="zjyw">
+    <meta name="author" content="cdg">
+    <meta name="keyword" content="Metro, Metro UI, Dashboard, Bootstrap, Admin, Template, Theme, Responsive, Fluid, Retina">
+    <!-- end: Meta -->
+    
+    <!-- start: Mobile Specific -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <!-- end: Mobile Specific -->
+    
+    <!-- start: CSS -->
+    <link id="bootstrap-style" href="/static/css/bootstrap.min.css" rel="stylesheet">
+    <link href="/static/css/bootstrap-responsive.min.css" rel="stylesheet">
+    <link id="base-style" href="/static/css/style.css" rel="stylesheet">
+    <link id="base-style-responsive" href="/static/css/style-responsive.css" rel="stylesheet">
+    <!-- end: CSS -->
+    
+   
+    <!-- The HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
+        <script src="/static/js/html5.js"></script>
+        <link id="ie-style" href="/static/css/ie.css" rel="stylesheet">
+    <![endif]-->
+    
+    <!--[if IE 9]>
+        <link id="ie9style" href="/static/css/ie9.css" rel="stylesheet">
+    <![endif]-->
+        
+    <!-- start: Favicon -->
+    <link rel="shortcut icon" href="/static/img/favicon.ico">
+    <!-- end: Favicon -->
+    
+    <style>  
+        div.graph  
+                {  
+                    width: 280px;  
+                    height: 200px;  
+                }
+        .table th, .table td { 
+            text-align: center; 
+            height:38px;
+        }
+    </style>  
+    <script type="text/javascript">
+    
+    </script>
+</head>
+
+<body>
+
+            <div class="row-fluid sortable">        
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class="halflings-icon info-sign"></i><span class="break"></span>主机概述</h2>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped table-bordered bootstrap-datatable">
+                        <thead>
+                            <tr>
+                                <th>主机ID</th>
+                                <th>主机名</th>
+                                <th>操作系统</th>
+                                <th>分组信息</th>
+                                <th>公网IP</th>
+                                <th>安全产品状态</th>
+                                <!--<th>体检评分</th>-->
+                            </tr>
+                        </thead>   
+                        <tbody>
+                            {% for zjxx in agent_rs_lst %}
+                            <tr>
+                                <td class="center"><h2>{{ zjxx.agent_id }}</h2></td>
+                                {% if zjxx.agent_name %}
+                                    <td class="center"><h2>{{ zjxx.agent_name }}</td>
+                                {% else %}
+                                    <td class="center"><h2>--</td>
+                                {% endif%}
+                                {% if zjxx.agent_system %}
+                                    <td class="center"><h2>{{ zjxx.agent_system }}</td>
+                                {% else %}
+                                    <td class="center"><h2>--</td>
+                                {% endif%}
+                                
+                                {% if zjxx.agent_group %}
+                                    <td class="center"><h2>{{ zjxx.agent_group }}</td>
+                                {% else %}
+                                    <td class="center"><h2>--</td>
+                                {% endif%}
+                                
+                                {% if zjxx.agent_ip %}
+                                    <td class="center"><h2>{{ zjxx.agent_ip }}</td>
+                                {% else %}
+                                    <td class="center"><h2>--</td>
+                                {% endif%}
+                                <td class="center-block">
+                                    <span class="label label-success">
+                                    {% ifequal zjxx.agent_state '00' %}
+                                        安全
+                                    {% else %}
+                                        不安全
+                                    {% endifequal %}
+                                    </span>
+                                </td>
+                                <!--<td class="center"><h2>{{ zjxx.agent_new_score }}</h2></td>-->
+                            </tr>
+                            {% endfor %}
+                            
+                        </tbody>
+                    </table>
+                
+                </div>
+            </div>
+            </div>
+            <!-- end: row -->
+            
+            <!-- start: row -->
+            <div class="row-fluid sortable">        
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class=" halflings-icon wrench"></i><span class="break"></span>任务列表</h2>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                    <a href="#" onclick="task_add_tz();">单击添加任务</a>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    {% if task_rs_lst %}
+                        <thead>
+                            <tr>
+                                <th>任务ID</th>
+                                <th>任务名称</th>
+                                <th>任务描述</th>
+                                <th>执行周期</th>
+                                <th>开始时间</th>
+                                <th>是否执行</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>   
+                        <tbody>
+                            {% for task in task_rs_lst %}
+                            <tr>
+                                <td class="center text-warning"><h2>{{ task.task_id }}</h2></td>
+                                <td class="center text-warning"><h2>{{ task.task_name }}</h2></td>
+                                <td class="center text-warning"><h2>{{ task.task_detail }}</h2></td>
+                                <td class="center text-warning"><h2>
+                                {% ifequal task.task_circle "0" %}
+                                    一次性任务
+                                {% endifequal %}
+                                {% ifequal task.task_circle "1" %}
+                                    每天一次
+                                {% endifequal %}
+                                {% ifequal task.task_circle "2" %}
+                                    每周一次
+                                {% endifequal %}
+                                {% ifequal task.task_circle "3" %}
+                                    每月一次
+                                {% endifequal %}
+                                {% ifequal task.task_circle "4" %}
+                                    每季度一次
+                                {% endifequal %}
+                                {% ifequal task.task_circle "5" %}
+                                    每年一次
+                                {% endifequal %}
+                                </h2></td>
+                                <td class="center text-warning"><h2>{{ task.task_start_time }}</h2></td>
+                                <td class="center text-warning"><h2>
+                                    {% ifequal task.task_state "0" %}
+                                        未启用
+                                    {% endifequal %}
+                                    {% ifequal task.task_state "1" %}
+                                        启用
+                                    {% endifequal %}
+                                    {% ifequal task.task_state "2" %}
+                                        未启用
+                                    {% endifequal %}
+                                    {% ifequal task.task_state "9" %}
+                                        已执行
+                                    {% endifequal %}
+                                    
+                                </h2></td>
+                                <td class="center">
+                                    {% ifequal task.task_state "0" %}
+                                        <a class="glyphicons-icon play" data-toggle="tooltip" title="启动" onclick="task_start({{ task.task_id }});" href='#' ></a>
+                                        <a class="glyphicons-icon pause" data-toggle="tooltip" title="停止" onclick="task_stop({{ task.task_id }});" href='#' ></a>
+                                        <a class="glyphicons-icon edit" data-toggle="tooltip" title="修改"   onclick="task_edit_tz('{{ task.task_id }}','{{ task.task_module }}','{{ task.task_circle }}','{{ task.start_time }}','{{ task.task_state }}','{{ task.task_name }}','{{ task.task_detail }}');" href='#' ></a>
+                                        <a class="glyphicons-icon circle_remove" data-toggle="tooltip" title="删除"   onclick="task_del({{ task.task_id }});" href='#' ></a>
+                                    {% endifequal %}
+                                    {% ifequal task.task_state "1" %}
+                                        <a class="glyphicons-icon pause" data-toggle="tooltip" title="停止" onclick="task_stop({{ task.task_id }});" href='#' ></a>
+                                        <a class="glyphicons-icon edit" data-toggle="tooltip" title="修改"   onclick="task_edit_tz('{{ task.task_id }}','{{ task.task_module }}','{{ task.task_circle }}','{{ task.start_time }}','{{ task.task_state }}','{{ task.task_name }}','{{ task.task_detail }}');" href='#' ></a>
+                                        <a class="glyphicons-icon circle_remove" data-toggle="tooltip" title="删除"   onclick="task_del({{ task.task_id }});" href='#' ></a>
+                                    {% endifequal %}
+                                    {% ifequal task.task_state "2" %}
+                                        <a class="glyphicons-icon play" data-toggle="tooltip" title="启动" onclick="task_start({{ task.task_id }});" href='#' ></a>
+                                        <a class="glyphicons-icon edit" data-toggle="tooltip" title="修改"   onclick="task_edit_tz('{{ task.task_id }}','{{ task.task_module }}','{{ task.task_circle }}','{{ task.start_time }}','{{ task.task_state }}','{{ task.task_name }}','{{ task.task_detail }}');" href='#' ></a>
+                                        <a class="glyphicons-icon circle_remove" data-toggle="tooltip" title="删除"   onclick="task_del({{ task.task_id }});" href='#' ></a>
+                                    {% endifequal %}
+                                    {% ifequal task.task_state "9" %}
+                                        <a class="glyphicons-icon edit" data-toggle="tooltip" title="修改"   onclick="task_edit_tz('{{ task.task_id }}','{{ task.task_module }}','{{ task.task_circle }}','{{ task.start_time }}','{{ task.task_state }}','{{ task.task_name }}','{{ task.task_detail }}');" href='#' ></a>
+                                        <a class="glyphicons-icon circle_remove" data-toggle="tooltip" title="删除"   onclick="task_del({{ task.task_id }});" href='#' ></a>
+                                    {% endifequal %}
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <td class="center"><h2>无</td>
+                    {% endif %}
+                    </table>
+                
+                </div>
+            </div>
+            </div>
+            <!-- end: row -->
+            
+            <!-- start: row -->
+            <div class="row-fluid sortable">        
+            <div class="box span12">
+                <div class="box-header" data-original-title>
+                    <h2><i class=" halflings-icon file"></i><span class="break"></span>体检报告</h2>
+                </div>
+                <div class="box-content">
+                    <table class="table table-striped table-bordered bootstrap-datatable datatable">
+                    {% if check_rs_lst %}
+                        <thead>
+                            <tr>
+                                <th>体检任务ID</th>
+                                <th>体检内容</th>
+                                <th>计划体检时间</th>
+                                <th>实际体检时间</th>
+                                <th>体检类型</th>
+                                <th>体检结果</th>
+                                <th>操作</th>
+                            </tr>
+                        </thead>   
+                        <tbody>
+                            {% for checkinfo in check_rs_lst %}
+                            <tr>
+                                <td class="center"><h2>{{ checkinfo.task_id }}</h2></td>
+                                <td class="center"><h2>{{ checkinfo.task_detail }}</h2></td>
+                                {% if checkinfo.task_scheme_time %}
+                                <td class="center"><h2>{{ checkinfo.task_scheme_time }}</h2></td>
+                                {% else %}
+                                <td class="center"><h2>--</h2></td>
+                                {% endif %}
+                                
+                                {% if checkinfo.task_real_time %}
+                                <td class="center"><h2>{{ checkinfo.task_real_time }}</h2></td>
+                                {% else %}
+                                <td class="center"><h2>--</h2></td>
+                                {% endif %}
+                                <td class="center"><h2>
+                                {% ifequal checkinfo.task_type "1" %}
+                                    主机检测
+                                {% endifequal %}
+                                {% ifequal checkinfo.task_type "2" %}
+                                    WebShell检测
+                                {% endifequal %}
+                                </h2></td>
+                                {% if checkinfo.task_result %}
+                                <td class="center"><h2>{{ checkinfo.task_result }}</h2></td>
+                                {% else %}
+                                <td class="center"><h2>--</h2></td>
+                                {% endif %}
+                                <td class="center">
+                                    <a class="glyphicons-icon notes" title="详细信息" onclick="zjxx_checkinfo({{ checkinfo.task_id }});" href='#' ></a>
+                                    <a class="glyphicons-icon download_alt"  title="下载" href="#"></a>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    {% else %}
+                        <td class="center"><h2>无</td>
+                    {% endif %}
+                    </table>
+                
+                </div>
+            </div>
+            </div>
+            <!-- end: row -->
+            
+</body>
+</html>
